@@ -1,3 +1,5 @@
+import java.util.*;
+
 class Node{
     int data;
     Node left;
@@ -24,17 +26,17 @@ class CreateTestTree{
     }
 }
 
-class TreeReaderRecursion{
-    
-    /**
-        This processData is general method and user can do anything whatever he
-        wants to do in this method for processing of the data
+interface ProcessData{
 
-     */
-
-    public void processData(int data){
-        System.out.println(data);
+    default  void processData(Object obj){
+        System.out.println(obj);
     }
+    
+}
+
+class TreeReaderRecursion implements ProcessData{
+    
+    
 
     
     /**
@@ -76,6 +78,29 @@ class TreeReaderRecursion{
             processData(node.data);        
         }
     }
+
+    
+}
+
+class LevelOrderTraversal implements ProcessData{
+
+    public void traverse(Node node){
+        if(node == null)
+            return;
+        ArrayDeque<Node> arrayDeque = new ArrayDeque<>();
+
+        arrayDeque.offer(node);
+
+        while(arrayDeque.size() != 0){
+            Node temp = arrayDeque.poll();
+            processData(temp.data);
+            if(temp.left !=  null)
+                arrayDeque.offer(temp.left);
+            if(temp.right !=  null)
+                arrayDeque.offer(temp.right);       
+        }
+    }
+
 }
 
 class Main{
@@ -93,6 +118,11 @@ class Main{
 
         System.out.println("In Order Traversal");
         treeRR.inOrderTraversal(node1);
+        System.out.println("------------------------------------------------------------------");
+
+        System.out.println("Level Order Traversal");
+        LevelOrderTraversal lot= new LevelOrderTraversal();
+        lot.traverse(node1);
         System.out.println("------------------------------------------------------------------");
     }
 }
